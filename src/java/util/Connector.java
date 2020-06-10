@@ -13,7 +13,7 @@ public class Connector {
         try {
 
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            connection= DriverManager.getConnection("jdbc:mysql://localhost:3306/hayvanatbahcesi?user=root&password=123654");
+            connection= DriverManager.getConnection("jdbc:mysql://localhost:3306/hayvanatbahcesi?user=root&password=12");
         //   System.out.println("Database Successfuly");
 
         } catch (SQLException e) {
