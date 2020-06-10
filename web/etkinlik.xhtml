@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+        <h:outputStylesheet library="css" name="bootstrap.css"/>
+       
+    </h:head>
+    <h:body>
+       <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                 <h:form>
+                <ul class="navbar-nav">
+                   
+                    <li class="nav-item active">
+                        <h:commandLink styleClass="nav-link" action="haber" value="Haber"/>
+                    </li>
+                    <li class="nav-item">
+                        <h:commandLink styleClass="nav-link" action="etkinlik" value="Etkinlik"/>
+                    </li>
+                       
+                    
+                </ul>
+                      </h:form>
+            </div>
+        </nav>
+            </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h:form>
+                        <h:dataTable styleClass="table table-striped" value="#{etkinlikController.etkinlikList}" var="etkinlik">
+                            <h:column>
+                                <f:facet name="header">ETKİNLİK İD</f:facet>
+                                    #{etkinlik.etkinlik_id}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">ACİKLAMA</f:facet>
+                                <h:commandLink action="#{etkinlikController.updateForm(etkinlik)}" value="#{etkinlik.aciklama}">
+                                
+                                </h:commandLink>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">UCRET</f:facet>
+                             
+                                   #{etkinlik.ucret}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">DELETE</f:facet>
+
+                                <h:commandButton styleClass="btn btn-sm btn-danger" action="#{etkinlikController.deleteConfirm(etkinlik)}" value="Delete"/>
+
+                            </h:column>
+                        </h:dataTable>
+                    </h:form>
+                </div>
+                <div class="col-md-6">
+                    <h:form>
+                        <div class="form-group">
+                            <h:inputHidden value="#{etkinlikController.etkinlik.etkinlik_id}"/>
+                            <label for="inputAciklama">Etkinlik Aciklama</label>
+                            <h:inputText styleClass="form-control" value="#{etkinlikController.etkinlik.aciklama}"/>
+                             <label for="inputUcret">Etkinlik Ucret</label><br/>
+                             <h:inputText styleClass="form-control" value="#{etkinlikController.etkinlik.ucret}"/>
+                       
+                            <div class="form-group">
+                            <h:commandButton rendered="#{etkinlikController.etkinlik.aciklama !=null}" styleClass="btn btn-info" value="Update" action="#{etkinlikController.update}"/>
+                            <h:commandButton rendered="#{etkinlikController.etkinlik.aciklama ==null}" styleClass="btn btn-primary" value="Create" action="#{etkinlikController.create}"/>
+                             <h:commandButton rendered="#{etkinlikController.etkinlik.aciklama !=null}" styleClass="btn btn-secondary" value="Clear Form" action="#{etkinlikController.clearForm}"/>
+                          
+                        </div>
+                        </div>
+                    </h:form>
+
+                </div>
+            </div>
+            <h:form>
+
+            </h:form>
+        </div>
+    </h:body>
+</html>
+
