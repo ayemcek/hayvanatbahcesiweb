@@ -25,25 +25,68 @@ public class EtkinlikController implements Serializable{
     private EtkinlikDao etkinlikDao;
     private Etkinlik etkinlik;
     
-    public String updateForm(Etkinlik etk){
+   private int page=1;
+   private int pageSize=5;
+   private int pageCount;
+
+    public void next(){
+        if(this.page==this.getPageCount())
+            this.page=1;
+        else
+        this.page++;
+    }
+    public void previous(){
+        if(this.page==1)
+            this.page=this.getPageCount();
+        else
+        this.page--;
+    }
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public int getPageCount() {
+        this.pageCount=(int) Math.ceil(this.getEtkinlikDao().count()/(double)pageSize);
+        return pageCount;
+    }
+
+    public void setPageCount(int pageCount) {
+        this.pageCount = pageCount;
+    }
+    
+   
+
+    public void updateForm(Etkinlik etk){
         this.etkinlik=etk;
-        return"etkinlik";
+        
    }
     
-     public String update(){
+     public void update(){
         this.getEtkinlikDao().update(this.etkinlik);
         this.etkinlik=new Etkinlik();
-        return "etkinlik";
+        
         
     }
-    public String clearForm(){
+    public void clearForm(){
         this.etkinlik=new Etkinlik();
-        return "etkinlik";
-    } 
+       
+          } 
     
     public String deleteConfirm(Etkinlik etk){
         this.etkinlik=etk;
-        return "confirm_etkinlik";
+        return "etkinlik_delete";
     }
   
     public String delete(){
@@ -52,11 +95,13 @@ public class EtkinlikController implements Serializable{
         return "etkinlik";
     }
     
-    public String create(){
+    public void create(){
         this.getEtkinlikDao().insert(this.etkinlik);
         this.etkinlik=new Etkinlik();
-        return"etkinlik";
+      
+
     }
+
     
     public EtkinlikController() {
         this.etkinlikList=new ArrayList();
@@ -64,7 +109,7 @@ public class EtkinlikController implements Serializable{
     }
 
     public List<Etkinlik> getEtkinlikList() {
-        this.etkinlikList=this.getEtkinlikDao().findAll();
+        this.etkinlikList=this.getEtkinlikDao().findAll(page, pageSize);
         return etkinlikList;
     }
 

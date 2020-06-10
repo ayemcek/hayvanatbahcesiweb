@@ -24,12 +24,13 @@ public class EtkinlikDao {
     private Connector connector;
     private Connection connection;
 
-    public List<Etkinlik> findAll() {
+    public List<Etkinlik> findAll(int page, int pageSize) {
         List<Etkinlik> etkinlikList = new ArrayList<>();
+         int start=(page-1)*pageSize;
 
         try {
             Statement st = this.getConnection().createStatement();
-            ResultSet rs = st.executeQuery("select * from etkinlik");
+            ResultSet rs = st.executeQuery("Select * from etkinlik order by etkinlik_id desc limit "+start+","+pageSize);
             while (rs.next()) {
                 Etkinlik e = new Etkinlik();
                 e.setEtkinlik_id(rs.getLong("etkinlik_id"));
@@ -43,6 +44,21 @@ public class EtkinlikDao {
         }
 
         return etkinlikList;
+    }
+      public int count(){
+       int count=0;
+         
+        try {
+            PreparedStatement pst=this.getConnection().prepareStatement("select count(etkinlik_id) as etkinlik_count from etkinlik");
+             ResultSet rs=  pst.executeQuery();
+             rs.next();
+             count=rs.getInt("etkinlik_count");
+             
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        
+        return count;
     }
 
     public Etkinlik find(Long id){

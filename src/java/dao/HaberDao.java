@@ -27,11 +27,13 @@ public class HaberDao {
    
     private EtkinlikDao etkinlikDao;
     
-    public List<Haber> findAll(){
+    public List<Haber> findAll(int page, int pageSize){
         List<Haber>haberList=new ArrayList<>();
-         
-        try {
-            PreparedStatement pst=this.getConnection().prepareStatement("select * from haber");
+        
+         int start=(page-1)*pageSize;
+      //  limit"+start+","+pageSize
+         try {
+            PreparedStatement pst=this.getConnection().prepareStatement("Select * from haber order by haber_id desc limit "+start+","+pageSize);
              ResultSet rs=  pst.executeQuery();
            while(rs.next()){
                Haber h=new Haber();
@@ -47,6 +49,22 @@ public class HaberDao {
         
         return haberList;
     }
+    
+     public int count(){
+       int count=0;
+         
+        try {
+            PreparedStatement pst=this.getConnection().prepareStatement("select count(haber_id) as haber_count from haber");
+             ResultSet rs=  pst.executeQuery();
+             rs.next();
+             count=rs.getInt("haber_count");
+             
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        
+        return count;
+    }
 
      public void create(Haber haber) {
        try{
@@ -54,7 +72,7 @@ public class HaberDao {
           
            PreparedStatement pst=this.getConnection().prepareStatement("insert into haber(aciklama,tarih,etkinlik_id) values(?,?,?)");
           pst.setString(1,haber.getAciklama());
-           pst.setString(2,haber.getTarih());
+          pst.setString(2,haber.getTarih() );
            pst.setLong(3,haber.getEtkinlik().getEtkinlik_id());
            pst.executeUpdate();
             
@@ -68,9 +86,9 @@ public class HaberDao {
        try{
            
        
-        PreparedStatement pst=this.getConnection().prepareStatement("update haber set aciklama=? ,tarih=?,etkinlik_id=? where haber_id=?");
+        PreparedStatement pst=this.getConnection().prepareStatement("update haber set aciklama=? ,tarih=?, etkinlik_id=? where haber_id=?");
            pst.setString(1, haber.getAciklama());
-           pst.setString(2, haber.getTarih());
+           pst.setString(2,haber.getTarih() );
            pst.setLong(3,haber.getEtkinlik().getEtkinlik_id());
            pst.setLong(4,haber.getHaber_id());
            pst.executeUpdate();
